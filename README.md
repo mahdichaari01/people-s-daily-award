@@ -17,6 +17,39 @@ Thank you for joining us on this journey to promote positivity and kindness in o
 - [@ines-besrour](https://github.com/ines-besrour)
 - [@Imenkaabachi](https://github.com/Imenkaabachi)
 
+## Running Locally
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/en/download/)
+- [pnpm](https://pnpm.io/installation)
+
+### Installation
+
+1. Clone the repo
+
+```sh
+git clone
+```
+
+2. Install dependencies
+
+```sh
+pnpm install
+```
+
+3. Start the backend server
+
+```sh
+pnpm run -F backend start:dev
+```
+
+4. Start the frontend server
+
+```sh
+pnpm run -F frontend dev
+```
+
 ## Contributing
 
 This project is strucutured as a monorepo. It leverages pnpm workspaces to acheive that.
