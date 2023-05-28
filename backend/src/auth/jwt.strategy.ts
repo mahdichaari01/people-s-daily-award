@@ -25,7 +25,15 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     ) {
       return null;
     }
-    // if()
+    const user = await this.authService.ValidateUserData({
+      email: payload.username,
+      name: payload.name,
+      id: payload.sub,
+    });
+    if (!user) {
+      return null;
+    }
+
     return {
       userId: payload.sub,
       username: payload.username,

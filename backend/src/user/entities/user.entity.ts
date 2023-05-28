@@ -1,16 +1,16 @@
 import { TimestampEntites } from 'src/Generiques/Timestamp.entities';
-import { OneToMany, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('user')
 export class UserEntity extends TimestampEntites {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-  @Column({
-    length: 50,
-    unique: true,
-  })
-  username: string;
+  // @Column({
+  //   length: 50,
+  //   unique: true,
+  // })
+  // username: string;
 
   @Column({
     unique: true,
@@ -23,8 +23,11 @@ export class UserEntity extends TimestampEntites {
   @Column()
   salt: string;
 
-  @Column({
-    type: 'enum',
-  })
-  role: string;
+  @Column()
+  name: string;
+
+  // @Column({
+  //   type: 'enum',
+  // })
+  // role: string;
 }
