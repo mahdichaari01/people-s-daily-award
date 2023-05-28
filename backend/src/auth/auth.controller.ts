@@ -8,8 +8,8 @@ import {
 } from '@nestjs/common';
 import { LocalAuthGuard } from './local-auth.guard';
 import { AuthService } from './auth.service';
-// import { CreateUserDto } from 'src/users/dtos/createUser.dto';
 import { JwtAuthGuard } from './jwt-auth.guard';
+import { CreateUserDto } from './types.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -23,9 +23,7 @@ export class AuthController {
   }
 
   @Post('signup')
-  async signUp(
-    @Body() user: { email: string; password: string; name: string },
-  ) {
+  async signUp(@Body() user: CreateUserDto) {
     return this.authService.signUp(user);
   }
 

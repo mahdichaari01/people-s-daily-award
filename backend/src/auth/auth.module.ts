@@ -27,5 +27,6 @@ import { UserModule } from 'src/user/user.module';
       signOptions: { expiresIn: '30 days' },
     }),
   ],
+  exports: [AuthService, JwtAuthGuard],
 })
 export class AuthModule {}
