@@ -8,6 +8,8 @@ import { CommonModule } from './common/common.module';
 
 import { UserModule } from './user/user.module';
 import { UserEntity } from './user/entities/user.entity';
+import { NominationEntity } from './nominate/nominate.entity';
+import { NominationModule } from './nominate/nominate.module';
 
 @Module({
   imports: [
@@ -16,14 +18,15 @@ import { UserEntity } from './user/entities/user.entity';
       type: 'mariadb',
       host: 'localhost',
       port: 3306,
-      username: 'nestproject',
+      username: 'root',
       password: '',
       database: 'peoplesdailyaward',
-      entities: [UserEntity],
+      entities: [UserEntity, NominationEntity],
       synchronize: true,
     }),
     CommonModule,
     UserModule,
+    NominationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
