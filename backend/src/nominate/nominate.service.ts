@@ -29,7 +29,7 @@ export class NominationService {
   }
 
   async findAll(): Promise<NominationEntity[]> {
-    return await this.nominationRepository.find();
+    return await this.nominationRepository.find({ relations: ['user'] });
   }
 
   async findOne(id: number): Promise<NominationEntity> {
