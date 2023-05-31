@@ -10,16 +10,22 @@ import {
 import { NominationService } from './nominate.service';
 import { NominationEntity } from './nominate.entity';
 import { CreateNominationDto } from './nominate.dto';
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { Request } from '@nestjs/common';
 
 @Controller('nominations')
+@UseGuards(JwtAuthGuard)
 export class NominationController {
   constructor(private readonly nominationService: NominationService) {}
 
   @Post()
   async create(
     @Body() createNominationDto: CreateNominationDto,
+    @Request() req,
   ): Promise<NominationEntity> {
-    return await this.nominationService.create(createNominationDto);
+    const userId = req.user.userId;
+    return await this.nominationService.create(createNominationDto, userId);
   }
 
   @Get()

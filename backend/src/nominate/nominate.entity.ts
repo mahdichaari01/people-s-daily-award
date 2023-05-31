@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
-
+import { Entity, PrimaryGeneratedColumn, Column, JoinTable } from 'typeorm';
+import { UserEntity } from '../user/entities/user.entity';
+import { ManyToOne } from 'typeorm';
 @Entity('nominations')
 export class NominationEntity {
   @PrimaryGeneratedColumn()
@@ -16,4 +17,8 @@ export class NominationEntity {
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
+
+  @ManyToOne(() => UserEntity, (user) => user.nominations, { cascade: true })
+  @JoinTable()
+  user: UserEntity;
 }

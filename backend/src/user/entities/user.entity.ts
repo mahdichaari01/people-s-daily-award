@@ -1,16 +1,18 @@
 import { TimestampEntites } from 'src/Generiques/Timestamp.entities';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-
+import { Column, Entity, JoinTable, PrimaryGeneratedColumn } from 'typeorm';
+import { NominationEntity } from '../../nominate/nominate.entity';
+import { OneToMany } from 'typeorm';
 @Entity('user')
 export class UserEntity extends TimestampEntites {
-  @PrimaryGeneratedColumn('uuid')
+  @Column({
+    name: 'id',
+    primary: true,
+    type: 'uuid',
+    generated: 'uuid',
+    length: 36,
+    generatedType: 'STORED',
+  })
   id: string;
-
-  // @Column({
-  //   length: 50,
-  //   unique: true,
-  // })
-  // username: string;
 
   @Column({
     unique: true,
@@ -26,8 +28,7 @@ export class UserEntity extends TimestampEntites {
   @Column()
   name: string;
 
-  // @Column({
-  //   type: 'enum',
-  // })
-  // role: string;
+  @OneToMany(() => NominationEntity, (nomination) => nomination.user)
+  @JoinTable()
+  nominations: NominationEntity[];
 }
