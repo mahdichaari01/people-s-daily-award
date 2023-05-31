@@ -1,7 +1,14 @@
 import { TimestampEntites } from 'src/Generiques/Timestamp.entities';
-import { Column, Entity, JoinTable, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { NominationEntity } from '../../nominate/nominate.entity';
 import { OneToMany } from 'typeorm';
+import { VoteEntity } from 'src/vote/entities/vote.entity';
 @Entity('user')
 export class UserEntity extends TimestampEntites {
   @Column({
@@ -31,4 +38,8 @@ export class UserEntity extends TimestampEntites {
   @OneToMany(() => NominationEntity, (nomination) => nomination.user)
   @JoinTable()
   nominations: NominationEntity[];
+
+  @OneToOne(() => VoteEntity, (vote) => vote.user)
+  @JoinTable()
+  vote: VoteEntity;
 }
