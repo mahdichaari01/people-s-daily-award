@@ -17,7 +17,7 @@ import { VoteEntity } from './vote/entities/vote.entity';
     AuthModule,
     TypeOrmModule.forRootAsync({
       useFactory: () => ({
-        type: 'mariadb',
+        type: 'mysql',
         host: 'localhost',
         port: 3306,
         username: 'root',

@@ -11,11 +11,24 @@ import { UseGuards } from '@nestjs/common';
 import JwtAuthGuard from 'src/auth';
 import { VoteService } from './vote.service';
 import { VoteEntity } from './entities/vote.entity';
+import { NominationEntity } from 'src/nominate/nominate.entity';
+import { CreateVoteDto } from './DTO/CreateVoteDto';
+import { Request } from '@nestjs/common';
 
 @Controller('vote')
 @UseGuards(JwtAuthGuard)
 export class VoteController {
   constructor(private readonly voteService: VoteService) {}
+
+  @Post()
+  async create(
+    @Body() createVoteDto: CreateVoteDto,
+    @Request() req,
+  ): Promise<VoteEntity> {
+    const userId = req.user.userId;
+    const nominationId = req.nomination.nominationId;
+    return await this.voteService.create(createVoteDto, userId, nominationId);
+  }
 
   @Get()
   async findAll(): Promise<VoteEntity[]> {
