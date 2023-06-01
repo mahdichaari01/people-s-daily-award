@@ -10,18 +10,20 @@ import { UserModule } from './user/user.module';
 import { UserEntity } from './user/entities/user.entity';
 import { NominationEntity } from './nominate/nominate.entity';
 import { NominationModule } from './nominate/nominate.module';
+import { VoteModule } from './vote/vote.module';
+import { VoteEntity } from './vote/entities/vote.entity';
 @Module({
   imports: [
     AuthModule,
     TypeOrmModule.forRootAsync({
       useFactory: () => ({
-        type: 'mariadb',
+        type: 'mysql',
         host: 'localhost',
         port: 3306,
         username: 'root',
         password: '',
         database: 'peoplesdailyaward',
-        entities: [UserEntity, NominationEntity],
+        entities: [UserEntity, NominationEntity, VoteEntity],
         synchronize: true,
       }),
       inject: [],
@@ -29,6 +31,7 @@ import { NominationModule } from './nominate/nominate.module';
     CommonModule,
     UserModule,
     NominationModule,
+    VoteModule,
   ],
   controllers: [AppController],
   providers: [AppService],

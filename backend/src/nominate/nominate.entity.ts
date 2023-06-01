@@ -1,6 +1,13 @@
-import { Entity, PrimaryGeneratedColumn, Column, JoinTable } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  JoinTable,
+  OneToMany,
+} from 'typeorm';
 import { UserEntity } from '../user/entities/user.entity';
 import { ManyToOne } from 'typeorm';
+import { VoteEntity } from 'src/vote/entities/vote.entity';
 @Entity('nominations')
 export class NominationEntity {
   @PrimaryGeneratedColumn()
@@ -21,4 +28,8 @@ export class NominationEntity {
   @ManyToOne(() => UserEntity, (user) => user.nominations, { cascade: true })
   @JoinTable()
   user: UserEntity;
+
+  @OneToMany(() => VoteEntity, (vote) => vote.nomination)
+  @JoinTable()
+  vote: VoteEntity[];
 }
