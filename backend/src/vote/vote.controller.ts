@@ -20,14 +20,19 @@ import { Request } from '@nestjs/common';
 export class VoteController {
   constructor(private readonly voteService: VoteService) {}
 
-  @Post()
+  /*  @Post()
   async create(
     @Body() createVoteDto: CreateVoteDto,
     @Request() req,
   ): Promise<VoteEntity> {
     const userId = req.user.userId;
-    const nominationId = req.nomination.nominationId;
+    const nominationId = req.user.nominationId;
     return await this.voteService.create(createVoteDto, userId, nominationId);
+  } */
+
+  @Post()
+  async create(@Body() vote: CreateVoteDto): Promise<VoteEntity> {
+    return await this.voteService.create(vote);
   }
 
   @Get()

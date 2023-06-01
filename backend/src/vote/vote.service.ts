@@ -14,24 +14,37 @@ export class VoteService {
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
     @InjectRepository(NominationEntity)
-    private readonly NominationRepository: Repository<NominationEntity>,
+    private readonly nominationRepository: Repository<NominationEntity>,
   ) {}
 
-  async create(
+  /*async create(
     createVoteDto: CreateVoteDto,
     userId: string,
-    nominationId: number,
+    NominationId: number,
   ): Promise<VoteEntity> {
     const vote = new VoteEntity();
     const user = await this.userRepository.findOneBy({ id: userId });
-    const nomination = await this.NominationRepository.findOneBy({
-      id: nominationId,
-    });
+    const nomination = await this.nominationRepository.findOneBy({ id: NominationId });
     vote.user = user;
     vote.nomination = nomination;
+    const savedvote = await this.VoteRepository.save(vote);
+    return savedvote;
+  }*/
+
+  async create(votedata: CreateVoteDto): Promise<VoteEntity> {
+    const { nominationId, userId } = votedata;
+    const vote = new VoteEntity();
+    const user = await this.userRepository.findBy({ id: userId });
+    console.log(user);
+    const nomination = await this.nominationRepository.findBy({
+      id: nominationId,
+    });
+    vote.nomination = nomination[0];
+    vote.user = user[0];
     const savedVote = await this.VoteRepository.save(vote);
     return savedVote;
   }
+
   async findAll(): Promise<VoteEntity[]> {
     return await this.VoteRepository.find({ relations: ['nomination'] });
   }

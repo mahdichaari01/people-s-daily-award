@@ -31,5 +31,5 @@ export class NominationEntity {
 
   @OneToMany(() => VoteEntity, (vote) => vote.nomination)
   @JoinTable()
-  vote: VoteEntity;
+  vote: VoteEntity[];
 }
