@@ -5,6 +5,8 @@ import { UserEntity } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { NominationEntity } from 'src/nominate/nominate.entity';
 import { CreateVoteDto } from './DTO/CreateVoteDto';
+import { MoreThanOrEqual } from 'typeorm';
+import { BadRequestException } from '@nestjs/common';
 
 @Injectable()
 export class VoteService {
@@ -30,19 +32,50 @@ export class VoteService {
     const savedvote = await this.VoteRepository.save(vote);
     return savedvote;
   }*/
+  async nbVoteByNomination() {
+    // Créer un queryBuilder
 
-  async create(votedata: CreateVoteDto): Promise<VoteEntity> {
-    const { nominationId, userId } = votedata;
-    const vote = new VoteEntity();
-    const user = await this.userRepository.findBy({ id: userId });
-    console.log(user);
-    const nomination = await this.nominationRepository.findBy({
-      id: nominationId,
+    const qb = this.VoteRepository.createQueryBuilder('vote');
+    // Chercher le nombre de vote par nomination
+    qb.select('vote.nomination, count(vote.id) as nombreDeVote').groupBy(
+      'vote.nomination',
+    );
+    console.log(qb.getSql());
+    return await qb.getRawMany();
+  }
+
+  async hasUserVotedToday(userId: string): Promise<boolean> {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const vote = await this.VoteRepository.findOne({
+      where: {
+        user: { id: userId },
+        createdAt: MoreThanOrEqual(today),
+      },
     });
-    vote.nomination = nomination[0];
-    vote.user = user[0];
-    const savedVote = await this.VoteRepository.save(vote);
-    return savedVote;
+
+    return !!vote;
+  }
+
+  async create(votedata: CreateVoteDto, userId: string): Promise<VoteEntity> {
+    const { nominationId } = votedata;
+    const vote = new VoteEntity();
+    const user = await this.userRepository.findOneBy({ id: userId });
+    const hasVotedToday = await this.hasUserVotedToday(userId);
+
+    if (hasVotedToday) {
+      throw new BadRequestException('User has already voted today');
+    } else {
+      const nomination = await this.nominationRepository.findOneBy({
+        id: nominationId,
+      });
+      vote.nomination = nomination;
+      vote.user = user;
+      const savedVote = await this.VoteRepository.save(vote);
+
+      return savedVote;
+    }
   }
 
   async findAll(): Promise<VoteEntity[]> {

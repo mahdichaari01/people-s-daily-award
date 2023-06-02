@@ -10,8 +10,4 @@ export class CreateVoteDto {
   @IsNotEmpty()
   @IsNumber()
   nominationId: number;
-
-  @IsNotEmpty()
-  @IsString()
-  userId: string;
 }

@@ -31,13 +31,21 @@ export class VoteController {
   } */
 
   @Post()
-  async create(@Body() vote: CreateVoteDto): Promise<VoteEntity> {
-    return await this.voteService.create(vote);
+  async create(
+    @Body() vote: CreateVoteDto,
+    @Request() req,
+  ): Promise<VoteEntity> {
+    const userId = req.user.userId;
+    return await this.voteService.create(vote, userId);
   }
 
   @Get()
   async findAll(): Promise<VoteEntity[]> {
     return await this.voteService.findAll();
+  }
+  @Get('nombre')
+  async nbVoteByNomination() {
+    return await this.voteService.nbVoteByNomination();
   }
 
   @Get(':id')
