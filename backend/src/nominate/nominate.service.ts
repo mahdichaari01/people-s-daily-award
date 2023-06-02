@@ -51,8 +51,8 @@ export class NominationService {
     return await this.nominationRepository.find({ relations: ['user'] });
   }
 
-  async findOne(id: number): Promise<NominationEntity> {
-    return await this.nominationRepository.findOneBy({ id: id });
+  async find(options?: any): Promise<NominationEntity[]> {
+    return await this.nominationRepository.find(options);
   }
 
   async update(

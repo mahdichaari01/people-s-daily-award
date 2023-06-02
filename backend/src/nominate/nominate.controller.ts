@@ -13,7 +13,8 @@ import { CreateNominationDto } from './nominate.dto';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Request } from '@nestjs/common';
-
+import { Query } from '@nestjs/common';
+import { Between, Raw } from 'typeorm';
 @Controller('nominations')
 @UseGuards(JwtAuthGuard)
 export class NominationController {
@@ -29,15 +30,39 @@ export class NominationController {
   }
 
   @Get()
+  async findOne(
+    @Query('id') userId?: string,
+    @Query('date') createdAt?: string,
+  ): Promise<NominationEntity[]> {
+    const queryOptions: any = {};
+
+    if (userId) {
+      queryOptions.user = { id: userId };
+    }
+
+    if (createdAt) {
+      const date = new Date(createdAt);
+      const endDate = new Date(date);
+      endDate.setDate(endDate.getDate() + 1);
+      queryOptions.createdAt = Between(date, endDate);
+    }
+    if (!userId && !createdAt) {
+      const date = new Date(Date.now());
+      const endDate = new Date(date);
+      endDate.setDate(endDate.getDate() + 1);
+      queryOptions.createdAt = Between(date, endDate);
+    }
+    console.log(queryOptions);
+    const options = {
+      relations: ['user'],
+      where: queryOptions,
+    };
+    return await this.nominationService.find(options);
+  }
+  @Get()
   async findAll(): Promise<NominationEntity[]> {
     return await this.nominationService.findAll();
   }
-
-  @Get(':id')
-  async findOne(@Param('id') id: number): Promise<NominationEntity> {
-    return await this.nominationService.findOne(id);
-  }
-
   @Put(':id')
   async update(
     @Param('id') id: number,
