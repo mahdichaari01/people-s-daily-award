@@ -1,5 +1,8 @@
+import { Button } from './components/Button';
 import { AppProviders } from './providers';
 import { useMediaQuery } from 'usehooks-ts';
+import { BrowserRouter } from './routes';
+import { RouterProvider } from 'react-router-dom';
 function App() {
 	const md = useMediaQuery('(min-width: 768px)');
 	if (!md)
@@ -8,7 +11,11 @@ function App() {
 				Please Use a bigger device. Mobile version is still in development
 			</div>
 		);
-	return <AppProviders>Main App</AppProviders>;
+	return (
+		<AppProviders>
+			<RouterProvider router={BrowserRouter} />
+		</AppProviders>
+	);
 }
 
 export default App;
