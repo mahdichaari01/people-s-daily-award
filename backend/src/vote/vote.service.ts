@@ -82,8 +82,8 @@ export class VoteService {
     return await this.VoteRepository.find({ relations: ['nomination'] });
   }
 
-  async findOne(id: string): Promise<VoteEntity> {
-    return await this.VoteRepository.findOneBy({ id: id });
+  async find(options?: any): Promise<VoteEntity[]> {
+    return await this.VoteRepository.find(options);
   }
 
   async update(id: string, VoteData: Partial<VoteEntity>): Promise<VoteEntity> {
