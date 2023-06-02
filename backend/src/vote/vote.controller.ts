@@ -43,6 +43,10 @@ export class VoteController {
   async findAll(): Promise<VoteEntity[]> {
     return await this.voteService.findAll();
   }
+  @Get('nombre')
+  async nbVoteByNomination() {
+    return await this.voteService.nbVoteByNomination();
+  }
 
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<VoteEntity> {

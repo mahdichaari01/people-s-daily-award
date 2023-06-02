@@ -32,6 +32,18 @@ export class VoteService {
     const savedvote = await this.VoteRepository.save(vote);
     return savedvote;
   }*/
+  async nbVoteByNomination() {
+    // Créer un queryBuilder
+
+    const qb = this.VoteRepository.createQueryBuilder('vote');
+    // Chercher le nombre de vote par nomination
+    qb.select('vote.nomination, count(vote.id) as nombreDeVote').groupBy(
+      'vote.nomination',
+    );
+    console.log(qb.getSql());
+    return await qb.getRawMany();
+  }
+
   async hasUserVotedToday(userId: string): Promise<boolean> {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
