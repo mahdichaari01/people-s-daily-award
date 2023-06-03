@@ -16,10 +16,9 @@ import { Request } from '@nestjs/common';
 import { Query } from '@nestjs/common';
 import { Between, Raw } from 'typeorm';
 @Controller('nominations')
-@UseGuards(JwtAuthGuard)
 export class NominationController {
   constructor(private readonly nominationService: NominationService) {}
-
+  @UseGuards(JwtAuthGuard)
   @Post()
   async create(
     @Body() createNominationDto: CreateNominationDto,
@@ -30,7 +29,7 @@ export class NominationController {
   }
 
   @Get()
-  async findOne(
+  async findBy(
     @Query('id') userId?: string,
     @Query('date') createdAt?: string,
   ): Promise<NominationEntity[]> {
@@ -41,7 +40,9 @@ export class NominationController {
     }
 
     if (createdAt) {
+      console.log(createdAt);
       const date = new Date(createdAt);
+      date.setHours(0, 0, 0, 0);
       const endDate = new Date(date);
       endDate.setDate(endDate.getDate() + 1);
       queryOptions.createdAt = Between(date, endDate);
@@ -65,6 +66,7 @@ export class NominationController {
   async findAll(): Promise<NominationEntity[]> {
     return await this.nominationService.findAll();
   }
+  @UseGuards(JwtAuthGuard)
   @Put(':id')
   async update(
     @Param('id') id: number,
@@ -72,7 +74,7 @@ export class NominationController {
   ): Promise<NominationEntity> {
     return await this.nominationService.update(id, nominationData);
   }
-
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   async delete(@Param('id') id: number): Promise<void> {
     await this.nominationService.delete(id);

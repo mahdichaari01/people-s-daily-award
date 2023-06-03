@@ -1,29 +1,50 @@
+import { useNavigate, useParams } from 'react-router-dom';
 import { Container } from '../components/Container';
 import { NominationBody } from '../components/NominationBody';
 import { NominationFooter } from '../components/NominationFooter';
 import { NominationHeader } from '../components/NominationHeader';
 import { NominationLayout } from '../components/NominationLayout';
+import { useContext } from 'react';
+import { dataContext } from '.';
+import { submitVote } from '../api/submitVote';
 
 export const NominationSection = () => {
+	const { nominationID } = useParams();
+	const data = useContext(dataContext);
+	const navigate = useNavigate();
+	if (!data) return <div>404</div>;
+	const index = data.findIndex((v) => v.id.toString() === nominationID);
+	if (index === -1) return <div>404</div>;
+	const nomination = data[index];
 	return (
 		<Container className="w-full h-fit sticky top-8 self-start">
 			<NominationLayout>
 				<NominationHeader
-					img="https://cdn.britannica.com/47/188747-050-1D34E743/Bill-Gates-2011.jpg"
-					name="Sarrah Ben Halima"
-					nominator="Adam Dey"
-					next={() => {
-						return;
-					}}
-					prev={() => {
-						return;
-					}}
+					img={nomination.imageLink}
+					name={nomination.nomineeName}
+					nominator={nomination.user.name}
+					next={
+						index !== data.length - 1
+							? () => navigate('data[index + 1].id.toString()')
+							: undefined
+					}
+					prev={
+						index !== 0
+							? () => navigate(data[index - 1].id.toString())
+							: undefined
+					}
 				/>
 				<NominationBody
-					description="Laboris est in sit irure exercitation sit aliquip adipisicing. Ipsum id est ullamco labore. Deserunt reprehenderit ad ex consectetur ea cupidatat veniam. Velit dolore culpa consectetur aliqua velit anim cillum consectetur ad. Non non labore veniam labore."
-					embed={`<iframe width="560" height="315" src="https://www.youtube.com/embed/OAK6JdfiqgI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`}
+					description={nomination.reason}
+					embed={nomination.embed}
 				/>
-				<NominationFooter />
+				<NominationFooter
+					rank={index + 1}
+					votes={nomination.vote.length}
+					vote={() =>
+						submitVote(nomination.id).catch((err) => console.log(err))
+					}
+				/>
 			</NominationLayout>
 		</Container>
 	);

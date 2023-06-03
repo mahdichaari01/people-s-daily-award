@@ -5,11 +5,12 @@ export class CreateNominationDto {
   @IsString()
   nomineeName: string;
 
-  @IsOptional()
   @IsString()
   reason?: string;
 
-  @IsOptional()
   @IsUrl()
   imageLink?: string;
+
+  @IsString()
+  embed?: string;
 }

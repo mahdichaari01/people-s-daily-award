@@ -25,6 +25,9 @@ export class NominationService implements OnModuleInit {
 
   async findMostVotedNominee(): Promise<NominationEntity> {
     const votesPerNominee = await this.voteService.nbVoteByNomination();
+    if (votesPerNominee.length === 0) {
+      return null;
+    }
     const maxVoteItem = votesPerNominee.reduce((prev, current) => {
       const prevVote = parseInt(prev.nombreDeVote);
       const currentVote = parseInt(current.nombreDeVote);
@@ -51,7 +54,10 @@ export class NominationService implements OnModuleInit {
     try {
       // Get the most voted nominee
       const mostVotedNominee = await this.findMostVotedNominee();
-
+      if (!mostVotedNominee) {
+        console.log('No winner today.');
+        return;
+      }
       const notificationMessage = `Congratulations to the winner: ${mostVotedNominee.nomineeName}!
         What he did: ${mostVotedNominee.reason}`;
       await this.sendWinnerNotification(notificationMessage);
@@ -93,6 +99,7 @@ export class NominationService implements OnModuleInit {
       nomination.reason = createNominationDto.reason;
       nomination.imageLink = createNominationDto.imageLink;
       nomination.user = user;
+      nomination.embed = createNominationDto.embed;
       const savedNomination = await this.nominationRepository.save(nomination);
       return savedNomination;
     }

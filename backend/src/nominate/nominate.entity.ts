@@ -22,6 +22,9 @@ export class NominationEntity {
   @Column({ type: 'varchar', length: 255, nullable: true })
   imageLink: string;
 
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  embed: string;
+
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 
@@ -29,7 +32,7 @@ export class NominationEntity {
   @JoinTable()
   user: UserEntity;
 
-  @OneToMany(() => VoteEntity, (vote) => vote.nomination)
+  @OneToMany(() => VoteEntity, (vote) => vote.nomination, { eager: true })
   @JoinTable()
   vote: VoteEntity[];
 }

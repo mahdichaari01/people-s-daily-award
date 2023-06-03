@@ -33,10 +33,14 @@ export const RegularCard = (props: {
 			src={props.img}
 			borderRadius={'full'}
 			alt={props.name + 'picture'}
-			boxSize={'8.2rem'}
+			height={'8.2rem'}
+			width={'8.2rem'}
+			objectFit={'cover'}
 		/>
 		<Tooltip label={props.name} aria-label={props.name} placement="bottom">
-			<div className="font-extrabold text-2xl line-clamp-1">{props.name}</div>
+			<div className="font-extrabold text-xl line-clamp-1 text-center">
+				{props.name}
+			</div>
 		</Tooltip>
 	</div>
 );

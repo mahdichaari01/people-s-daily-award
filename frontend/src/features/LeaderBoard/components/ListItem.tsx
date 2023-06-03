@@ -1,17 +1,22 @@
 import { Image } from '@chakra-ui/react';
+import { NavLink } from 'react-router-dom';
 
 export const ListItem = (props: {
-	id: string;
+	id: string | number;
 	img: string;
 	name: string;
 	voteCount: number;
 	rank: number;
+	to: string;
 	active?: boolean;
 }) => (
-	<div
-		className={`flex flex-row items-center justify-between w-full h-16 rounded-full p-[.3125rem] pr-4 cursor-pointer active:scale-[102%] hover:brightness-95 transition-all ${
-			props.active ? 'bg-black text-white' : 'bg-white '
-		}`}
+	<NavLink
+		className={({ isActive }) => {
+			return `flex flex-row items-center justify-between w-full h-16 rounded-full p-[.3125rem] pr-4 cursor-pointer active:scale-[102%] hover:brightness-95 transition-all ${
+				isActive ? 'bg-black text-white' : 'bg-white '
+			}`;
+		}}
+		to={props.to}
 	>
 		<div className="h-full w-full flex flex-row justify-start items-center  gap-4">
 			<Image
@@ -30,5 +35,5 @@ export const ListItem = (props: {
 		<div className="text-[2rem] font-bold text-right w-[6.25rem]">
 			#{props.rank}
 		</div>
-	</div>
+	</NavLink>
 );

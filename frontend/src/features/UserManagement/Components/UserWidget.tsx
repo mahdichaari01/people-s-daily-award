@@ -16,16 +16,39 @@ import avatar from '../../../assets/avatar.png';
 import confirmedIcon from '../../../assets/Approval.png';
 import { UserSectionLayout } from './UserSectionLayout';
 import { Button } from '../../../components';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useUser, useLogout, useAuth } from '../../../lib/AuthContext';
+import { AuthUser } from '../../auth';
+import { Navigate } from 'react-router-dom';
 
 export const UserWidget = () => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [temImgLink, setTempImgLink] = useState<string>('');
-
+	const auth = useAuth();
+	const logout = useLogout();
+	const getUser = useUser();
+	const [isUserLoading, setIsUserLoading] = useState(true);
+	const [user, setUser] = useState<AuthUser | undefined>(undefined);
+	useEffect(() => {
+		if (isUserLoading) {
+			setIsUserLoading(false);
+			getUser()
+				.then((res) => {
+					setUser(res);
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		}
+	}, []);
+	if (!auth) return <Navigate to="/login" />;
 	return (
 		<UserSectionLayout>
 			<div className="bg-white w-full h-[40%] shrink-0 rounded-b-3xl shadow-md flex flex-col items-center justify-end relative gap-2">
-				<button className="absolute top-0 right-0 mr-2 mt-2 p-2 rounded-full transition-all  hover:bg-neutral-200">
+				<button
+					onClick={logout}
+					className="absolute top-0 right-0 mr-2 mt-2 p-2 rounded-full transition-all  hover:bg-neutral-200"
+				>
 					<LogoutIcon />
 				</button>
 				<div className="w-fit h-fit relative rounded-full overflow-hidden active:scale-95">

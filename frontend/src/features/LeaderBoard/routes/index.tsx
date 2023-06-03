@@ -1,15 +1,18 @@
-import { Outlet, RouteObject } from 'react-router-dom';
+import { Navigate, Outlet, RouteObject } from 'react-router-dom';
 import { LeaderboardPage } from '../Pages';
 import { NominationSection } from '../Pages/NominationSection';
 import { NominateSection } from '../Pages/NominateSection';
 
 export const LeaderboardRoute: RouteObject = {
-	element: <LeaderboardPage />,
+	element: (
+		<>
+			<Outlet />
+		</>
+	),
 	children: [
-		{ index: true, element: <div>index</div> },
 		{
 			path: ':date',
-			element: <Outlet />,
+			element: <LeaderboardPage />,
 			children: [
 				{
 					index: true,
@@ -25,7 +28,7 @@ export const LeaderboardRoute: RouteObject = {
 				},
 			],
 		},
+		{ index: true, element: <Navigate to="today" /> },
 	],
-
 	path: '/leaderboard',
 };

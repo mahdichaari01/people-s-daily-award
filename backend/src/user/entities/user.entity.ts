@@ -20,6 +20,9 @@ export class UserEntity extends TimestampEntites {
   })
   email: string;
 
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  imageLink: string;
+
   @Column()
   password: string;
 

@@ -1,7 +1,9 @@
 import { PropsWithChildren } from 'react';
 
 export const Layout = (props: PropsWithChildren) => (
-	<div className="w-full bg-[#42A4FF] grid grid-cols-2">{props.children}</div>
+	<div className="w-full bg-[#42A4FF] grid grid-cols-[1fr,min-content]">
+		{props.children}
+	</div>
 );
 
 export const FixedColumn = (

@@ -34,6 +34,8 @@ export const FirstPlaceCard = (props: {
 			alt={props.name + 'picture'}
 			height={'full'}
 			width={'auto'}
+			aspectRatio={1 / 1}
+			objectFit={'cover'}
 		/>
 		<div>
 			<Tooltip label={props.name} aria-label={props.name} placement="bottom">

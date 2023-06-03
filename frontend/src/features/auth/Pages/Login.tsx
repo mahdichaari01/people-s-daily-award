@@ -15,7 +15,11 @@ export const Login = () => {
 	const [password, setPassword] = useState('');
 	const { login, isLoading, error } = useLogin();
 	useEffect(() => {
-		if (auth) navigate(searchParams.get('redirect') ?? '/user');
+		if (auth) {
+			const redirect = searchParams.get('redirect');
+			console.log(redirect);
+			navigate(redirect ? redirect : '/user');
+		}
 	}, [auth, navigate, searchParams]);
 	return (
 		<PageLayout bg="green">
