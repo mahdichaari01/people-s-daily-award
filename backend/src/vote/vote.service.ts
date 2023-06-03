@@ -40,7 +40,6 @@ export class VoteService {
     qb.select('vote.nomination, count(vote.id) as nombreDeVote').groupBy(
       'vote.nomination',
     );
-    console.log(qb.getSql());
     return await qb.getRawMany();
   }
 

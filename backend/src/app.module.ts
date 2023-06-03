@@ -12,8 +12,11 @@ import { NominationEntity } from './nominate/nominate.entity';
 import { NominationModule } from './nominate/nominate.module';
 import { VoteModule } from './vote/vote.module';
 import { VoteEntity } from './vote/entities/vote.entity';
+import { ScheduleModule } from '@nestjs/schedule';
+
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     AuthModule,
     TypeOrmModule.forRootAsync({
       useFactory: () => ({

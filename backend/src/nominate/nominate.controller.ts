@@ -47,7 +47,9 @@ export class NominationController {
       queryOptions.createdAt = Between(date, endDate);
     }
     if (!userId && !createdAt) {
-      const date = new Date(Date.now());
+      // declate variable today with current date only (without time)
+      const date = new Date();
+      date.setHours(0, 0, 0, 0);
       const endDate = new Date(date);
       endDate.setDate(endDate.getDate() + 1);
       queryOptions.createdAt = Between(date, endDate);
