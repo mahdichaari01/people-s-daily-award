@@ -6,14 +6,65 @@ import { CreateNominationDto } from './nominate.dto';
 import { UserEntity } from '../user/entities/user.entity';
 import { MoreThanOrEqual } from 'typeorm';
 import { BadRequestException } from '@nestjs/common';
+import { OnModuleInit } from '@nestjs/common';
+import { Cron } from '@nestjs/schedule';
+import { VoteService } from '../vote/vote.service';
 @Injectable()
-export class NominationService {
+export class NominationService implements OnModuleInit {
   constructor(
     @InjectRepository(NominationEntity)
     private readonly nominationRepository: Repository<NominationEntity>,
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
+    private voteService: VoteService,
   ) {}
+
+  onModuleInit() {
+    this.scheduleNotificationJob();
+  }
+
+  async findMostVotedNominee(): Promise<NominationEntity> {
+    const votesPerNominee = await this.voteService.nbVoteByNomination();
+    const maxVoteItem = votesPerNominee.reduce((prev, current) => {
+      const prevVote = parseInt(prev.nombreDeVote);
+      const currentVote = parseInt(current.nombreDeVote);
+
+      if (currentVote > prevVote) {
+        return current;
+      } else {
+        return prev;
+      }
+    });
+
+    const maxNominationId = maxVoteItem.nominationId;
+    const maxNomination = await this.nominationRepository.findOne({
+      where: { id: maxNominationId },
+    });
+
+    return maxNomination;
+  }
+
+  @Cron('0 0 0 * * *', {
+    name: 'notifications',
+  })
+  async scheduleNotificationJob() {
+    try {
+      // Get the most voted nominee
+      const mostVotedNominee = await this.findMostVotedNominee();
+
+      const notificationMessage = `Congratulations to the winner: ${mostVotedNominee.nomineeName}!
+        What he did: ${mostVotedNominee.reason}`;
+      await this.sendWinnerNotification(notificationMessage);
+
+      console.log('Winner notifications sent successfully.');
+    } catch (error) {
+      console.error('Failed to send winner notifications:', error);
+    }
+  }
+
+  private async sendWinnerNotification(message: string): Promise<void> {
+    console.log('Sending notification:', message);
+  }
 
   async hasUserNominatedToday(userId: string): Promise<boolean> {
     const today = new Date();
