@@ -33,4 +33,11 @@ export class AuthController {
   async testRoute(@Request() request) {
     return request.user;
   }
+
+  @Get('afat')
+  //decodes the token and returns the user
+  async testRoute2(@Request() request) {
+    console.log(request.headers);
+    return;
+  }
 }

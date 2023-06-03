@@ -3,9 +3,9 @@ import { Button } from '../../../components';
 import girlinlove from '../../../assets/girlinlove.png';
 import { Image } from '@chakra-ui/react';
 export const Layout = (props: PropsWithChildren) => (
-	<div className="h-screen w-full bg-[#FEBB58] px-12 py-16 flex flex-row gap-5 justify-between">
-		<div className="w-[50%] h-full">{props.children}</div>
-		<div className="w-[40%] h-full text-white flex flex-col justify-end gap-4 items-end">
+	<div className="h-screen w-full bg-[#FEBB58] px-12 py-16 flex flex-row gap-5 justify-between items-center">
+		<div className="w-[50%] h-fit">{props.children}</div>
+		<div className="w-[40%] h-fit text-white flex flex-col justify-end gap-4 items-end">
 			<div
 				className={`font-black text-[4.3rem] leading-none font-[montserrat] select-none text-[#DA9733] text-right`}
 			>
